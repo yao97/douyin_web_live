@@ -1,6 +1,7 @@
 import os
 from protobuf import message_pb2
-
+from protobuf import wss_pb2
+import gzip
 from messages.member import MemberMessage
 from messages.like import LikeMessage
 from messages.roomuserseq import RoomUserSeqMessage
@@ -22,13 +23,16 @@ init()
 
 def unpackMsgBin(filepath):
     response = message_pb2.Response()
-
+    wss = wss_pb2.WssResponse()
     try:
         with open(filepath, 'rb') as f:
-            response.ParseFromString(f.read())
-
+            path_content = f.read()
+            wss.ParseFromString( path_content )
+            decompressed = gzip.decompress(wss.data)
+            response.ParseFromString(decompressed)
             decodeMsg(response.messages)
     except Exception as e:
+        os.remove(filepath)
         pass
     finally:
         os.remove(filepath)
