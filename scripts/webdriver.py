@@ -17,6 +17,11 @@ def go(url):
     chrome_options.add_argument('--proxy-server=%s' % config()['webdriver']['proxy'])
     chrome_options.add_argument('--headless')
 
+    # 2022-04-09 添加一个忽略证书
+    chrome_options.add_argument('-ignore-certificate-errors')
+    chrome_options.add_argument('-ignore -ssl-errors')
+    chrome_options.add_argument('--incognito')
+
     proxy = Proxy()
     proxy.proxy_type = ProxyType.MANUAL
     proxy.http_proxy = config()['webdriver']['proxy']

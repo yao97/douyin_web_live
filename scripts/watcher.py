@@ -1,6 +1,6 @@
 import concurrent.futures
 import queue
-
+import time
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
@@ -23,6 +23,7 @@ class Watcher:
         try:
             while True:
                 with concurrent.futures.ThreadPoolExecutor() as executor:
+                    time.sleep(0.2)
                     executor.submit(unpackMsgBin, q.get())
         except:
             self.observer.stop()

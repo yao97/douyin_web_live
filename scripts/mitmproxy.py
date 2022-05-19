@@ -3,11 +3,14 @@
 
 import uuid
 from mitmproxy import http
+import re
 
 class Writer:
-    def response(self, flow: http.HTTPFlow) -> None:
-        if flow.request.host == 'live.douyin.com':
+    def websocket_message(self, flow: http.HTTPFlow) :
+        re_c = re.search('webcast3-ws-web-.*\.douyin\.com', flow.request.host)
+        if re_c :
             with open('/Users/geng/douyin_live/' + uuid.uuid4().hex, 'wb') as f:
-                f.write(bytes(flow.response.content))
+                mess = flow.websocket.messages[-1].content
+                f.write(bytes(mess))
 
 addons = [Writer()]
