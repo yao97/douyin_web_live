@@ -1,4 +1,6 @@
 import os
+
+from handler.common import MESSAGE_QUEUE
 from protobuf import message_pb2
 from protobuf import wss_pb2
 import gzip
@@ -8,34 +10,23 @@ from messages.roomuserseq import RoomUserSeqMessage
 from messages.gift import GiftMessage
 from messages.social import SocialMessage
 from messages.chat import ChatMessage
+from output import OUTPUTER
 
-from colorama import init, Fore
-# define colors
-RED   = Fore.RED
-GREEN = Fore.GREEN
-BLUE = Fore.BLUE
-CYAN = Fore.CYAN
-MAGENTA = Fore.MAGENTA
-YELLOW = Fore.YELLOW
-WHITE = Fore.WHITE
-RESET = Fore.RESET
-init()
-
-def unpackMsgBin(filepath):
-    response = message_pb2.Response()
-    wss = wss_pb2.WssResponse()
-    try:
-        with open(filepath, 'rb') as f:
-            path_content = f.read()
-            wss.ParseFromString( path_content )
+def loop_queue():
+    while True:
+        message = MESSAGE_QUEUE.get()
+        if type(message) == str:
+            message = message.encode("UTF-8")
+        try:
+            response = message_pb2.Response()
+            wss = wss_pb2.WssResponse()
+            wss.ParseFromString(message)
             decompressed = gzip.decompress(wss.data)
             response.ParseFromString(decompressed)
             decodeMsg(response.messages)
-    except Exception as e:
-        os.remove(filepath)
-        pass
-    finally:
-        os.remove(filepath)
+        except Exception as e:
+            # 发出去的信息无法解析
+            pass
 
 def decodeMsg(messages):
     for message in messages:
@@ -43,44 +34,34 @@ def decodeMsg(messages):
             if message.method == 'WebcastMemberMessage':
                 member_message = MemberMessage()
                 member_message.set_payload(message.payload)
-                member_message.persists()
-                
-                print(f"\n{RED}[+] {member_message} {RESET}")
-
+                for output in OUTPUTER:
+                    output.member_output(member_message)
             elif message.method == 'WebcastSocialMessage':
                 social_message = SocialMessage()
                 social_message.set_payload(message.payload)
-                social_message.persists()
-
-                print(f"\n{GREEN}[+] {social_message} {RESET}")
-
+                for output in OUTPUTER:
+                    output.social_output(social_message)
             elif message.method == 'WebcastChatMessage':
                 chat_message = ChatMessage()
                 chat_message.set_payload(message.payload)
-                chat_message.persists()
-
-                print(f"\n{BLUE}[+] {chat_message} {RESET}")
-
+                for output in OUTPUTER:
+                    output.chat_output(chat_message)
             elif message.method == 'WebcastLikeMessage':
                 like_message = LikeMessage()
                 like_message.set_payload(message.payload)
-                like_message.persists()
-
-                print(f"\n{CYAN}[+] {like_message} {RESET}")
-
+                for output in OUTPUTER:
+                    output.like_output(like_message)
             elif message.method == 'WebcastGiftMessage':
                 gift_message = GiftMessage()
                 gift_message.set_payload(message.payload)
-                gift_message.persists()
-
-                print(f"\n{MAGENTA}[+] {gift_message} {RESET}")
-
+                for output in OUTPUTER:
+                    output.gift_output(gift_message)
             elif message.method == 'WebcastRoomUserSeqMessage':
                 room_user_seq_message = RoomUserSeqMessage() 
                 room_user_seq_message.set_payload(message.payload)
-                room_user_seq_message.persists()
-
-                print(f"\n{YELLOW}[+] {room_user_seq_message} {RESET}")
-
+                for output in OUTPUTER:
+                    output.userseq_output(room_user_seq_message)
+            else:
+                ...
         except Exception as e:
             print(e)

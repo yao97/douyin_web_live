@@ -2,7 +2,7 @@ import requests
 import json
 
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.edge.options import Options
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.common.proxy import Proxy, ProxyType
 from selenium.webdriver.common.by import By
@@ -10,12 +10,10 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.expected_conditions import presence_of_element_located
 
 from config.helper import config
-from store.mongo import MongoStore
 
 def go(url):
     chrome_options = Options()
-    chrome_options.add_argument('--proxy-server=%s' % config()['webdriver']['proxy'])
-    chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--proxy-server=%s:%s' % (config()['mitm']['host'], config()['mitm']['port']))
 
     # 2022-04-09 添加一个忽略证书
     chrome_options.add_argument('-ignore-certificate-errors')
@@ -24,10 +22,10 @@ def go(url):
 
     proxy = Proxy()
     proxy.proxy_type = ProxyType.MANUAL
-    proxy.http_proxy = config()['webdriver']['proxy']
-    proxy.ssl_proxy = config()['webdriver']['proxy']
+    proxy.http_proxy = "%s:%s" % (config()['mitm']['host'], config()['mitm']['port'])
+    proxy.ssl_proxy = "%s:%s" % (config()['mitm']['host'], config()['mitm']['port'])
 
-    capabilities = DesiredCapabilities.CHROME
+    capabilities = DesiredCapabilities.EDGE
     proxy.add_to_capabilities(capabilities)
 
     with webdriver.Chrome(options=chrome_options,
@@ -45,19 +43,7 @@ def go(url):
         json_obj = json.loads(json_str)
 
         roomInfo = json_obj['initialState']['roomStore']['roomInfo']
-
-        store = MongoStore()
-        store.set_collection('room')
-        store.insert_one({
-            'roomId': roomInfo['roomId'],
-            'web_rid': roomInfo['web_rid'],
-            'title': roomInfo['room']['title'],
-            'user_count_str': roomInfo['room']['user_count_str'],
-            'cover': roomInfo['room']['cover']['url_list'][0],
-            'admin_user_ids': roomInfo['room']['admin_user_ids'],
-            'owner': roomInfo['room']['owner']
-        })
-        store.close()
+        print(roomInfo)
 
         wait.until(presence_of_element_located((By.CLASS_NAME, "oSu9Aw19")))
         

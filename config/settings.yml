@@ -1,14 +1,18 @@
-watchdog:
-  dir: '/Users/geng/douyin_live/'
+mitm:
+  bin: 'C:\Program Files (x86)\mitmproxy\bin\mitmdump.exe'
+  host: 127.0.0.1
+  port: 8080
 
 webdriver:
-  bin: '/usr/local/bin/chromedriver'
-  proxy: '127.0.0.1:8080'
-  
-mongo:
-  uri : 'mongodb://localhost:27017/'
-  dbname: 'tiktok'
-  enabled: 'on' 
+  bin: 'msedgedriver.exe'
+
+rooms:
+  - 19829678666
+  - https://live.douyin.com/579197336883
+
+http:
+  host: 127.0.0.1
+  port: 5000
 
 api:
   userinfo: 'https://live.douyin.com/webcast/user/?aid=6383&target_uid='
