@@ -18,7 +18,7 @@ if __name__ == '__main__':
         config()["mitm"]["bin"], "-s", "./scripts/mitmproxy.py", "-q",
         "--listen-host", config()["mitm"]["host"], "--listen-port", str(config()["mitm"]["port"])
     ])
-    t = threading.Thread(target=webdriver.go)
+    t = threading.Thread(target=webdriver.go, args=(sys.argv[1],))
     t.start()
     queue_thread = threading.Thread(target=loop_queue)
     queue_thread.start()
