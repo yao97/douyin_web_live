@@ -163,6 +163,11 @@ message MemberMessage{
     }
 }
 
+message ControlMessage {
+    Common common = 1;
+    int32 status = 2;
+}
+
 message Common{
     string method = 1;
     int64 msgId = 2;
