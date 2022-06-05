@@ -23,6 +23,12 @@ output:
       unknown: "./debug"
       known: False
 
+live:
+  rooms:
+    - "585723119943"
+  users:
+    - MS4wLjABAAAAzBItqEvCjPryxn_Y6w6LtRBFDOVNfjvYSJg8VVZFwlw
+
 http:
   host: 127.0.0.1
   port: 5000
