@@ -1,6 +1,7 @@
 from messages.base import Base
 from messages.chat import ChatMessage
 from messages.control import ControlMessage
+from messages.fansclub import FansclubMessage
 from messages.gift import GiftMessage
 from messages.like import LikeMessage
 from messages.member import MemberMessage
@@ -9,6 +10,9 @@ from messages.social import SocialMessage
 
 
 class IOutput():
+    def __del__(self):
+        self.terminate()
+
     def output(self, message_type: str, message_obj: Base):
         ...
 
@@ -33,8 +37,14 @@ class IOutput():
     def control_output(self, message: ControlMessage):
         ...
 
+    def fansclub_output(self, message: FansclubMessage):
+        ...
+
     def other_output(self, message_type: str, message_raw: bytes):
         ...
 
     def error_output(self, message_type: str, message_raw: bytes, exception: Exception):
+        ...
+
+    def terminate(self):
         ...

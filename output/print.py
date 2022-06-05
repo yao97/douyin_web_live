@@ -31,3 +31,9 @@ class Print(IOutput):
 
     def userseq_output(self, msg):
         print(f"\n{YELLOW}[+] {msg} {RESET}")
+
+    def control_output(self, msg):
+        print(f"\n{CYAN}[+] {msg} {RESET}")
+
+    def fansclub_output(self, msg):
+        print(f"\n{GREEN}[+] {msg} {RESET}")
