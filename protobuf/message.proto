@@ -163,6 +163,19 @@ message MemberMessage{
     }
 }
 
+message ControlMessage {
+    Common common = 1;
+    int32 status = 2;
+}
+
+message FansclubMessage {
+	Common commonInfo = 1;
+	// 升级是1，加入是2
+	int32 type = 2;
+	string content = 3;
+	User user = 4;
+}
+
 message Common{
     string method = 1;
     int64 msgId = 2;
