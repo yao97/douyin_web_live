@@ -1,5 +1,6 @@
 import threading
 import subprocess
+import atexit
 
 from config.helper import config
 from handler.http_server import app
@@ -15,5 +16,14 @@ if __name__ == '__main__':
     api_thread.start()
     browser_manager = init_browser_manager()
     output_manager = OutputManager()
+
+
+    def terminate():
+        print("terminate")
+        browser_manager.terminate()
+        output_manager.terminate()
+
+
+    atexit.register(terminate)
     output_manager.start_loop()
     api_thread.join()

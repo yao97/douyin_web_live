@@ -8,29 +8,30 @@ class XMLWriter(IOutput):
     """
     可输出与B站弹幕姬兼容的xml弹幕格式，可用于转成ass字幕
     """
+
     def __init__(self):
-        self.file_mappings: "dict[str, IO[str]]" = {}
+        self._file_mappings: "dict[str, IO[str]]" = {}
         self.time_mappings: "dict[str, float]" = {}
         self._file_name_pattern: "str" = config()['output']['xml']['file_pattern']
 
     def _get_fd_by_room_id(self, room_id: str) -> IO[str]:
-        if room_id in self.file_mappings:
-            return self.file_mappings[room_id]
+        if room_id in self._file_mappings:
+            return self._file_mappings[room_id]
         cur_ts = time.time()
         fd = open(self._file_name_pattern.format_map({
             "room_id": room_id,
             "ts": cur_ts
         }), "w", encoding="UTF-8")
-        self.file_mappings[room_id] = fd
+        self._file_mappings[room_id] = fd
         self.time_mappings[room_id] = cur_ts
         return fd
 
     def _close_fd_by_room_id(self, room_id: str):
-        if room_id in self.file_mappings:
-            fd = self.file_mappings[room_id]
+        if room_id in self._file_mappings:
+            fd = self._file_mappings[room_id]
             if not fd.closed:
                 fd.close()
-            del self.file_mappings[room_id]
+            del self._file_mappings[room_id]
         if room_id in self.time_mappings:
             del self.time_mappings[room_id]
 
@@ -50,9 +51,9 @@ class XMLWriter(IOutput):
         if fd is None:
             return
         cur_time = time.time()
-        _c = """<d p="{:.2f},1,24,16777215,{:.0f},0,{},0" user="{}">{}</d>\r\n""".format(
-            self._get_bias_ts_by_room_id(message.room_id, cur_time),
-            cur_time*1000, message.user().id, message.user().nickname, message.content
+        _c = """<d p="{:.2f},1,24,{},{:.0f},0,{},0" user="{}">{}</d>\r\n""".format(
+            self._get_bias_ts_by_room_id(message.room_id, cur_time), message.room_id,
+            cur_time * 1000, message.user().id, message.user().nickname, message.content
         )
         fd.write(_c)
 
@@ -66,3 +67,9 @@ class XMLWriter(IOutput):
             message.user().nickname, message.gift.name, message.instance.repeatCount
         )
         fd.write(_c)
+
+    def terminate(self):
+        print("保存所有弹幕文件中...")
+        for _room_id in self._file_mappings:
+            self._close_fd_by_room_id(_room_id)
+        print("保存完毕")

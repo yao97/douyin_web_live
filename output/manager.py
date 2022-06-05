@@ -40,7 +40,7 @@ class OutputManager():
             self._writer.append(self._mapping[_c]())
 
     def __del__(self):
-        ...
+        self.terminate()
 
     def decode_payload(self, message: MessagePayload):
         try:
@@ -107,3 +107,7 @@ class OutputManager():
         while True:
             message = MESSAGE_QUEUE.get()
             self.decode_payload(message)
+
+    def terminate(self):
+        for writer in self._writer:
+            writer.terminate()
