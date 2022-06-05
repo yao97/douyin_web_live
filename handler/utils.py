@@ -16,18 +16,16 @@ from output import OUTPUTER
 def loop_queue():
     while True:
         message = MESSAGE_QUEUE.get()
-        if type(message) == str:
-            message = message.encode("UTF-8")
         try:
             response = message_pb2.Response()
             wss = wss_pb2.WssResponse()
-            wss.ParseFromString(message)
+            wss.ParseFromString(message.body)
             decompressed = gzip.decompress(wss.data)
             response.ParseFromString(decompressed)
             decodeMsg(response.messages)
         except Exception as e:
-            # 发出去的信息无法解析
-            pass
+            for output in OUTPUTER:
+                output.error_output("ParseError", message.body, e)
 
 def decodeMsg(messages):
     for message in messages:
@@ -62,7 +60,14 @@ def decodeMsg(messages):
                 room_user_seq_message.set_payload(message.payload)
                 for output in OUTPUTER:
                     output.userseq_output(room_user_seq_message)
+            elif message.method == 'WebcastControlMessage':
+                control_message = ControlMessage()
+                control_message.set_payload(message.payload)
+                for output in OUTPUTER:
+                    output.control_output(control_message)
             else:
-                ...
+                for output in OUTPUTER:
+                    output.other_output(message.method, message.payload)
         except Exception as e:
-            print(e)
+            for output in OUTPUTER:
+                output.error_output(message.method, message.payload, e)
