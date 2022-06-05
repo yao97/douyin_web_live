@@ -3,8 +3,8 @@ import subprocess
 
 from config.helper import config
 from handler.http_server import app
-from handler.utils import loop_queue
 from browser.manager import BrowserManager
+from output.manager import OutputManager
 
 if __name__ == '__main__':
     mitmproxy_process = subprocess.Popen([
@@ -13,9 +13,9 @@ if __name__ == '__main__':
     ])
     api_thread = threading.Thread(target=app.run, args=(config()["http"]["host"], config()["http"]["port"],))
     api_thread.start()
-    manager = BrowserManager()
-    queue_thread = threading.Thread(target=loop_queue)
-    queue_thread.start()
-    queue_thread.join()
+    browser_manager = BrowserManager()
+    output_manager = OutputManager()
+    output_manager.start_loop()
+    api_thread.join()
 
     

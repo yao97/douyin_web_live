@@ -9,9 +9,19 @@ webdriver:
   edge:
     bin: msedgedriver.exe
 
-rooms:
-  - 19829678666
-  - https://live.douyin.com/579197336883
+output:
+  use:
+    - print
+    - xml
+    - debug
+  xml:
+    save_path: "./"
+    file_pattern: "{room_id}_{ts}.xml"
+  debug:
+    save_path:
+      error: "./error"
+      unknown: "./debug"
+      known: False
 
 http:
   host: 127.0.0.1
