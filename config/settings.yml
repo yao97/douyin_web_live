@@ -4,7 +4,10 @@ mitm:
   port: 8080
 
 webdriver:
-  bin: 'msedgedriver.exe'
+  headless: False
+  use: edge
+  edge:
+    bin: msedgedriver.exe
 
 rooms:
   - 19829678666
