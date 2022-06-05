@@ -1,6 +1,7 @@
 import os
 
 from handler.common import MESSAGE_QUEUE
+from messages.control import ControlMessage
 from protobuf import message_pb2
 from protobuf import wss_pb2
 import gzip

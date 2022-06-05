@@ -1,5 +1,6 @@
 from messages.base import Base
 from messages.chat import ChatMessage
+from messages.control import ControlMessage
 from messages.gift import GiftMessage
 from messages.like import LikeMessage
 from messages.member import MemberMessage
@@ -29,8 +30,11 @@ class IOutput():
     def userseq_output(self, message: RoomUserSeqMessage):
         ...
 
+    def control_output(self, message: ControlMessage):
+        ...
+
     def other_output(self, message_type: str, message_raw: bytes):
         ...
 
-    def error_output(self, exception: Exception):
+    def error_output(self, message_type: str, message_raw: bytes, exception: Exception):
         ...
