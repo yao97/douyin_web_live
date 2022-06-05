@@ -1,3 +1,1 @@
-from browser.edge import EdgeDriver
-
-driver = EdgeDriver()
+from browser.manager import BrowserManager
