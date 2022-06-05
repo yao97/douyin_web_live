@@ -43,7 +43,7 @@ class EdgeDriver(IDriver):
             return
         if tab_handler == self.browser.current_window_handle:
             return
-        self.browser.switch_to_window(tab_handler)
+        self.browser.switch_to.window(tab_handler)
 
     def open_url(self, url: str, tab_handler: str = ""):
         if tab_handler != "":
