@@ -1,4 +1,7 @@
 import os
+
+from messages.control import ControlMessage
+from messages.fansclub import FansclubMessage
 from protobuf import message_pb2
 from protobuf import wss_pb2
 import gzip
@@ -81,6 +84,20 @@ def decodeMsg(messages):
                 room_user_seq_message.persists()
 
                 print(f"\n{YELLOW}[+] {room_user_seq_message} {RESET}")
+
+            elif message.method == 'WebcastFansclubMessage':
+                fansclub_message = FansclubMessage()
+                fansclub_message.set_payload(message.payload)
+                fansclub_message.persists()
+
+                print(f"\n{RED}[+] {fansclub_message} {RESET}")
+
+            elif message.method == 'WebcastControlMessage':
+                control_message = ControlMessage()
+                control_message.set_payload(message.payload)
+                control_message.persists()
+
+                print(f"\n{CYAN}[+] {control_message} {RESET}")
 
         except Exception as e:
             print(e)
