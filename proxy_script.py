@@ -9,6 +9,15 @@ session = requests.session()
 
 
 class Writer:
+    def response(self, flow: http.HTTPFlow):
+        # /aweme/v1/web/user/profile/other/ 他人主页获取他人信息
+        if '/aweme/v1/web/user/profile/other' in flow.request.path:
+            response_json_content = flow.response.content
+            session.post("http://127.0.0.1:5000/user_info", headers={
+                "X-MITM-TS": str(time.time()),
+                "X_REFERER": flow.request.url
+            }, data=response_json_content, timeout=(1, 1))
+
     def websocket_message(self, flow: http.HTTPFlow):
         re_c = re.search('webcast\d-ws-web-.*\.douyin\.com', flow.request.host)
         if re_c:
@@ -18,7 +27,7 @@ class Writer:
             content = message.content
             session.post("http://127.0.0.1:5000/message", headers={
                 "X-MITM-TS": str(time.time()),
-                "X_REFERER": flow.request.host
+                "X_REFERER": flow.request.url
             }, data=content, timeout=(1, 1))
 
 
