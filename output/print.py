@@ -1,6 +1,6 @@
 from colorama import init, Fore
 
-from output import IOutput
+from output.IOutput import IOutput
 
 RED = Fore.RED
 GREEN = Fore.GREEN

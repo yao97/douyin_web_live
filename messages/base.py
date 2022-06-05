@@ -13,6 +13,12 @@ class Base:
     def extra_info(self):
         return dict()
 
+    @property
+    def room_id(self):
+        if hasattr(self.instance, 'common'):
+            return self.instance.common.roomId
+        return None
+
     def user(self):
         if(hasattr(self.instance, 'user')):
             return self.instance.user

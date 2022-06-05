@@ -7,6 +7,10 @@ class ChatMessage(Base):
     def __init__(self):
         self.instance = message_pb2.ChatMessage()
 
+    @property
+    def content(self):
+        return self.instance.content
+
     def format_content(self):
         return self.user().nickname + ': ' + self.instance.content
 
