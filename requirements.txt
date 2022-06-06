@@ -1,7 +1,6 @@
 colorama==0.4.4
-protobuf==3.19.1
-PyYAML==6.0
 selenium==4.1.0
 requests==2.27.1
 
 mitmproxy~=7.0.4
+protobuf<3.19
