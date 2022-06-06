@@ -56,6 +56,7 @@ class XMLWriter(IOutput):
             cur_time * 1000, message.user().id, message.user().nickname, message.content
         )
         fd.write(_c)
+        fd.flush()
 
     def gift_output(self, message):
         fd = self._get_fd_by_room_id(message.room_id)
@@ -67,6 +68,7 @@ class XMLWriter(IOutput):
             message.user().nickname, message.gift.name, message.instance.repeatCount
         )
         fd.write(_c)
+        fd.flush()
 
     def terminate(self):
         print("保存所有弹幕文件中...")
