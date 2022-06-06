@@ -38,6 +38,9 @@ class EdgeDriver(IDriver):
                 return _handle
         return ""
 
+    def get_current_tab(self) -> str:
+        return self.browser.current_window_handle
+
     def change_tab(self, tab_handler: str):
         if tab_handler not in self.browser.window_handles:
             return
@@ -46,14 +49,13 @@ class EdgeDriver(IDriver):
         self.browser.switch_to.window(tab_handler)
 
     def open_url(self, url: str, tab_handler: str = ""):
-        if tab_handler != "":
-            self.change_tab(tab_handler)
-        self.browser.get(url)
+        with self.op_tab(tab_handler):
+            self.browser.get(url)
+
+    def refresh(self, tab_handler: str = ""):
+        with self.op_tab(tab_handler):
+            self.browser.refresh()
 
     def screenshot(self, tab_handler: str = "") -> str:
-        cur_handle = self.browser.current_window_handle
-        if tab_handler != "":
-            self.change_tab(tab_handler)
-        b64 = self.browser.get_screenshot_as_base64()
-        self.change_tab(cur_handle)
-        return b64
+        with self.op_tab(tab_handler):
+            return self.browser.get_screenshot_as_base64()
