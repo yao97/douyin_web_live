@@ -45,9 +45,6 @@ class ChromeDriver(IDriver):
             return
         self.browser.switch_to.window(tab_handler)
 
-    def get_current_tab(self) -> str:
-        return self.browser.current_window_handle
-
     def open_url(self, url: str, tab_handler: str = ""):
         with self.op_tab(tab_handler):
             self.browser.get(url)

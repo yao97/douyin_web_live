@@ -1,11 +1,17 @@
 import contextlib
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from selenium.webdriver.remote.webdriver import WebDriver
 
 
 class IDriver():
-    def new_tab(self) -> str:
-        ...
+    browser: "WebDriver"
 
-    def get_current_tab(self) -> str:
+    def __del__(self):
+        self.browser.stop_client()
+
+    def new_tab(self) -> str:
         ...
 
     def change_tab(self, tab_handler: str):
@@ -16,7 +22,7 @@ class IDriver():
 
     @contextlib.contextmanager
     def op_tab(self, tab_handler: str):
-        cur_handle = self.get_current_tab()
+        cur_handle = self.browser.current_window_handle
         if tab_handler == "":
             tab_handler = cur_handle
         try:

@@ -71,6 +71,9 @@ class BrowserManager():
         if tab_info not in self._tabs:
             self._tabs.append(tab_info)
 
+    def terminate(self):
+        del self._driver
+
 
 class TabInfo(object):
     TAB_TYPE_OTHER = "other"

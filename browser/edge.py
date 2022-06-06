@@ -38,9 +38,6 @@ class EdgeDriver(IDriver):
                 return _handle
         return ""
 
-    def get_current_tab(self) -> str:
-        return self.browser.current_window_handle
-
     def change_tab(self, tab_handler: str):
         if tab_handler not in self.browser.window_handles:
             return
