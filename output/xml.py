@@ -72,6 +72,8 @@ class XMLWriter(IOutput):
 
     def terminate(self):
         print("保存所有弹幕文件中...")
-        for _room_id in self._file_mappings:
+        # copy
+        _rooms = [i for i in self._file_mappings.keys()]
+        for _room_id in _rooms:
             self._close_fd_by_room_id(_room_id)
         print("保存完毕")
