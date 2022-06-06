@@ -73,7 +73,7 @@ class BrowserManager():
 
     def terminate(self):
         if self._driver:
-            del self._driver
+            self._driver.terminate()
 
 
 class TabInfo(object):

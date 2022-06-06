@@ -9,6 +9,9 @@ class IDriver():
     browser: "WebDriver"
 
     def __del__(self):
+        self.terminate()
+
+    def terminate(self):
         self.browser.quit()
 
     def new_tab(self) -> str:
