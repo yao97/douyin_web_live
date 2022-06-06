@@ -9,6 +9,7 @@ webdriver:
     bin: msedgedriver.exe
   chrome:
     bin: chromedriver
+    no_sandbox: True
 
 output:
   use:

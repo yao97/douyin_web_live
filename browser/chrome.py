@@ -17,6 +17,8 @@ class ChromeDriver(IDriver):
         options.add_argument('-ignore-certificate-errors')
         options.add_argument('-ignore -ssl-errors')
         options.add_argument('--incognito')
+        if config()['webdriver']['chrome']['no_sandbox']:
+            options.add_argument('--no-sandbox')
         proxy = Proxy()
         proxy.proxy_type = ProxyType.MANUAL
         proxy.http_proxy = "%s:%s" % (config()['mitm']['host'], config()['mitm']['port'])
