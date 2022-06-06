@@ -3,6 +3,7 @@ import threading
 from typing import TYPE_CHECKING
 
 from config.helper import config
+from messages.fansclub import FansclubMessage
 from proxy.queues import MESSAGE_QUEUE
 from messages.chat import ChatMessage
 from messages.control import ControlMessage
@@ -93,6 +94,11 @@ class OutputManager():
                     control_message.set_payload(message.payload)
                     for writer in self._writer:
                         writer.control_output(control_message)
+                elif message.method == 'WebcastFansclubMessage':
+                    fansclub_message = FansclubMessage()
+                    fansclub_message.set_payload(message.payload)
+                    for writer in self._writer:
+                        writer.fansclub_output(fansclub_message)
                 else:
                     for writer in self._writer:
                         writer.other_output(message.method, message.payload)
