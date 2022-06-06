@@ -7,6 +7,8 @@ webdriver:
   use: edge
   edge:
     bin: msedgedriver.exe
+  chrome:
+    bin: chromedriver
 
 output:
   use:

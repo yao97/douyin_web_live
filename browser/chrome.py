@@ -21,7 +21,7 @@ class ChromeDriver(IDriver):
         proxy.proxy_type = ProxyType.MANUAL
         proxy.http_proxy = "%s:%s" % (config()['mitm']['host'], config()['mitm']['port'])
         proxy.ssl_proxy = "%s:%s" % (config()['mitm']['host'], config()['mitm']['port'])
-        capabilities = DesiredCapabilities.EDGE
+        capabilities = DesiredCapabilities.CHROME
         proxy.add_to_capabilities(capabilities)
 
         self.browser = webdriver.Chrome(options=options,
