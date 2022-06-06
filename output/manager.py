@@ -3,7 +3,7 @@ import threading
 from typing import TYPE_CHECKING
 
 from config.helper import config
-from handler.common import MessagePayload, MESSAGE_QUEUE
+from proxy.queues import MESSAGE_QUEUE
 from messages.chat import ChatMessage
 from messages.control import ControlMessage
 from messages.gift import GiftMessage
@@ -19,6 +19,7 @@ from protobuf import message_pb2, wss_pb2
 if TYPE_CHECKING:
     from typing import Type, Optional
     from output.IOutput import IOutput
+    from proxy.common import MessagePayload
 
 
 class OutputManager():
@@ -42,7 +43,7 @@ class OutputManager():
     def __del__(self):
         self.terminate()
 
-    def decode_payload(self, message: MessagePayload):
+    def decode_payload(self, message: "MessagePayload"):
         try:
             response = message_pb2.Response()
             wss = wss_pb2.WssResponse()

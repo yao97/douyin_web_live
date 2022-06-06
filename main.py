@@ -1,19 +1,13 @@
-import threading
-import subprocess
 import atexit
+import signal
 
-from config.helper import config
-from handler.http_server import app
 from browser.manager import init_manager as init_browser_manager
 from output.manager import OutputManager
+from proxy.manager import init_manager as init_proxy_manager
 
 if __name__ == '__main__':
-    mitmproxy_process = subprocess.Popen([
-        config()["mitm"]["bin"], "-s", "./proxy_script.py", "-q",
-        "--listen-host", config()["mitm"]["host"], "--listen-port", str(config()["mitm"]["port"])
-    ])
-    api_thread = threading.Thread(target=app.run, args=(config()["http"]["host"], config()["http"]["port"],))
-    api_thread.start()
+    proxy_manager = init_proxy_manager()
+    proxy_manager.start_loop()
     browser_manager = init_browser_manager()
     output_manager = OutputManager()
 
@@ -25,5 +19,7 @@ if __name__ == '__main__':
 
 
     atexit.register(terminate)
+    signal.signal(signal.SIGTERM, terminate)
+    signal.signal(signal.SIGINT, terminate)
     output_manager.start_loop()
-    api_thread.join()
+    proxy_manager.join()

@@ -1,5 +1,4 @@
 mitm:
-  bin: 'C:\Program Files (x86)\mitmproxy\bin\mitmdump.exe'
   host: 127.0.0.1
   port: 8080
 
@@ -26,6 +25,7 @@ output:
 live:
   rooms:
     - "585723119943"
+    - "583853809376"
   users:
     - MS4wLjABAAAAzBItqEvCjPryxn_Y6w6LtRBFDOVNfjvYSJg8VVZFwlw
 
