@@ -9,7 +9,7 @@ class IDriver():
     browser: "WebDriver"
 
     def __del__(self):
-        self.browser.stop_client()
+        self.browser.quit()
 
     def new_tab(self) -> str:
         ...
