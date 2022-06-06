@@ -16,6 +16,7 @@ if __name__ == '__main__':
         print("terminate")
         browser_manager.terminate()
         output_manager.terminate()
+        proxy_manager.terminate()
 
 
     atexit.register(terminate)

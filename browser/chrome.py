@@ -13,10 +13,12 @@ class ChromeDriver(IDriver):
         options = Options()
         if config()['webdriver']['headless']:
             options.add_argument("--headless")
+            options.add_argument("--window-size=1920,1080")
         options.add_argument('--proxy-server=%s:%s' % (config()['mitm']['host'], config()['mitm']['port']))
-        options.add_argument('-ignore-certificate-errors')
-        options.add_argument('-ignore -ssl-errors')
+        options.add_argument('--ignore-certificate-errors')
+        options.add_argument('--ignore-ssl-errors')
         options.add_argument('--incognito')
+        options.add_experimental_option('excludeSwitches', ['ignore-certificate-errors'])
         if config()['webdriver']['chrome']['no_sandbox']:
             options.add_argument('--no-sandbox')
         proxy = Proxy()

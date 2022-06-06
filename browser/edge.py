@@ -13,9 +13,10 @@ class EdgeDriver(IDriver):
         options = Options()
         if config()['webdriver']['headless']:
             options.add_argument("--headless")
+            options.add_argument("--window-size=1920,1080")
         options.add_argument('--proxy-server=%s:%s' % (config()['mitm']['host'], config()['mitm']['port']))
-        options.add_argument('-ignore-certificate-errors')
-        options.add_argument('-ignore -ssl-errors')
+        options.add_argument('--ignore-certificate-errors')
+        options.add_argument('--ignore-ssl-errors')
         options.add_argument('--incognito')
         proxy = Proxy()
         proxy.proxy_type = ProxyType.MANUAL

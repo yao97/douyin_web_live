@@ -72,7 +72,8 @@ class BrowserManager():
             self._tabs.append(tab_info)
 
     def terminate(self):
-        del self._driver
+        if self._driver:
+            del self._driver
 
 
 class TabInfo(object):

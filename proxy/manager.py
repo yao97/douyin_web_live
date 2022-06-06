@@ -30,6 +30,13 @@ class ProxyManager:
         )
         self._thread = None
 
+    def __del__(self):
+        self.terminate()
+
+    def terminate(self):
+        if self._mitm_instance:
+            self._mitm_instance.shutdown()
+
     def _load_addon(self):
         self._mitm_instance.addons.add(DanmakuWebsocketAddon(MESSAGE_QUEUE))
 
