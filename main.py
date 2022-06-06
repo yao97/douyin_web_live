@@ -12,7 +12,7 @@ if __name__ == '__main__':
     output_manager = OutputManager()
 
 
-    def terminate():
+    def terminate(*_):
         print("terminate")
         browser_manager.terminate()
         output_manager.terminate()
