@@ -18,7 +18,7 @@ from output.debug import DebugWriter
 from protobuf import message_pb2, wss_pb2
 
 if TYPE_CHECKING:
-    from typing import Type, Optional
+    from typing import Type, Optional, List
     from output.IOutput import IOutput
     from proxy.common import MessagePayload
 
@@ -29,7 +29,7 @@ class OutputManager():
         "xml": XMLWriter,
         "debug": DebugWriter,
     }
-    _writer: "list[IOutput]" = []
+    _writer: "List[IOutput]" = []
     _thread: "Optional[threading.Thread]"= None
 
     def __init__(self):
@@ -56,7 +56,7 @@ class OutputManager():
             for writer in self._writer:
                 writer.error_output("ParseError", message.body, e)
 
-    def decode_message(self, message_list: list[message_pb2.Message]):
+    def decode_message(self, message_list: "List[message_pb2.Message]"):
         for message in message_list:
             try:
                 if message.method == 'WebcastMemberMessage':

@@ -7,7 +7,7 @@ from browser.chrome import ChromeDriver
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from typing import Type, Optional
+    from typing import Type, Optional, List
     from browser.IDriver import IDriver
 
 _manager: "Optional[BrowserManager]" = None
@@ -24,7 +24,7 @@ class BrowserManager():
         if _config not in self._mapping:
             raise Exception("不支持的浏览器")
         self._driver: IDriver = self._mapping[_config]()
-        self._tabs: list[TabInfo] = []
+        self._tabs: "List[TabInfo]" = []
 
     def init_browser(self):
         _users = config()['live']['users']
