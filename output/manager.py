@@ -31,6 +31,7 @@ class OutputManager():
     }
     _writer: "List[IOutput]" = []
     _thread: "Optional[threading.Thread]"= None
+    _should_exit = threading.Event()
 
     def __init__(self):
         _config = config()['output']['use']
@@ -107,14 +108,22 @@ class OutputManager():
                     writer.error_output(message.method, message.payload, e)
 
     def start_loop(self):
+        self._should_exit.clear()
         self._thread = threading.Thread(target=self._handle)
         self._thread.start()
 
     def _handle(self):
         while True:
             message = MESSAGE_QUEUE.get()
+            if self._should_exit.is_set():
+                break
+            if message is None:
+                continue
             self.decode_payload(message)
 
     def terminate(self):
+        self._should_exit.set()
+        MESSAGE_QUEUE.put(None)
+
         for writer in self._writer:
             writer.terminate()

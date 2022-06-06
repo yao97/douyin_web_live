@@ -1,4 +1,8 @@
 from queue import SimpleQueue
-from proxy.common import MessagePayload
+from typing import TYPE_CHECKING
 
-MESSAGE_QUEUE: "SimpleQueue[MessagePayload]" = SimpleQueue()
+if TYPE_CHECKING:
+    from typing import Optional
+    from proxy.common import MessagePayload
+
+MESSAGE_QUEUE: "SimpleQueue[Optional[MessagePayload]]" = SimpleQueue()
