@@ -1,14 +1,40 @@
-watchdog:
-  dir: '/Users/geng/douyin_live/'
+mitm:
+  host: 127.0.0.1
+  port: 8080
 
 webdriver:
-  bin: '/usr/local/bin/chromedriver'
-  proxy: '127.0.0.1:8080'
-  
-mongo:
-  uri : 'mongodb://localhost:27017/'
-  dbname: 'tiktok'
-  enabled: 'on' 
+  headless: False
+  use: edge
+  edge:
+    bin: msedgedriver.exe
+  chrome:
+    bin: chromedriver
+    no_sandbox: True
+
+output:
+  use:
+    - print
+    - xml
+    - debug
+  xml:
+    save_path: "./"
+    file_pattern: "{room_id}_{ts}.xml"
+  debug:
+    save_path:
+      error: "./error"
+      unknown: "./debug"
+      known: False
+
+live:
+  rooms:
+    - "585723119943"
+    - "583853809376"
+  users:
+    - MS4wLjABAAAAzBItqEvCjPryxn_Y6w6LtRBFDOVNfjvYSJg8VVZFwlw
+
+http:
+  host: 127.0.0.1
+  port: 5000
 
 api:
   userinfo: 'https://live.douyin.com/webcast/user/?aid=6383&target_uid='

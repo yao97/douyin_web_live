@@ -1,2 +1,10 @@
 evn/*
 .DS_Store
+.idea
+.vscode
+venv
+debug
+error
+__pycache__
+*.py[cod]
+*.xml

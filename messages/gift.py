@@ -11,8 +11,13 @@ class GiftMessage(Base):
         return {
             'giftId': self.instance.gift.id,
             'giftName': self.instance.gift.name,
-            'giftCount': self.instance.gift.diamondCount,
+            'giftCount': self.instance.repeatCount,
+            'diamondCount': self.instance.gift.diamondCount,
         }
+
+    @property
+    def gift(self):
+        return self.instance.gift
 
     def format_content(self):
         return self.instance.common.describe
