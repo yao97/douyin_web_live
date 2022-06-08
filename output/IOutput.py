@@ -43,6 +43,9 @@ class IOutput():
     def other_output(self, message_type: str, message_raw: bytes):
         ...
 
+    def debug_output(self, message_type: str, message_raw: str):
+        ...
+
     def error_output(self, message_type: str, message_raw: bytes, exception: Exception):
         ...
 

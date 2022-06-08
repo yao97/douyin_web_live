@@ -18,6 +18,7 @@ _manager: "Optional[ProxyManager]" = None
 class ProxyManager:
     def __init__(self):
         self._mitm_instance = None
+        self._loop: "Optional[asyncio.AbstractEventLoop]" = None
         opts = Options(
             listen_host=config()['mitm']['host'],
             listen_port=config()['mitm']['port'],
@@ -34,6 +35,9 @@ class ProxyManager:
         self.terminate()
 
     def terminate(self):
+        if self._loop:
+            if self._loop.is_running():
+                self._loop.stop()
         if self._mitm_instance:
             self._mitm_instance.shutdown()
 
@@ -42,6 +46,7 @@ class ProxyManager:
 
     def _start(self):
         loop = asyncio.new_event_loop()
+        self._loop = loop
         asyncio.set_event_loop(loop)
         self._mitm_instance.run()
 

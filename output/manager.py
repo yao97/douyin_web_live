@@ -122,7 +122,8 @@ class OutputManager():
             self.decode_payload(message)
 
     def terminate(self):
-        self._should_exit.set()
+        if self._should_exit:
+            self._should_exit.set()
         MESSAGE_QUEUE.put(None)
 
         for writer in self._writer:
