@@ -32,9 +32,5 @@ live:
   users:
     - MS4wLjABAAAAzBItqEvCjPryxn_Y6w6LtRBFDOVNfjvYSJg8VVZFwlw
 
-http:
-  host: 127.0.0.1
-  port: 5000
-
 api:
   userinfo: 'https://live.douyin.com/webcast/user/?aid=6383&target_uid='
