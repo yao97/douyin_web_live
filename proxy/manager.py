@@ -30,19 +30,18 @@ class ProxyManager:
                 flow_detail=0,
                 termlog_verbosity="error",
             )
-        _loop = asyncio.get_event_loop()
-        _loop.run_until_complete(_init_mitm_instance())
+        self._loop.run_until_complete(_init_mitm_instance())
         self._thread = None
 
     def __del__(self):
         self.terminate()
 
     def terminate(self):
+        if self._mitm_instance:
+            self._mitm_instance.shutdown()
         if self._loop:
             if self._loop.is_running():
                 self._loop.stop()
-        if self._mitm_instance:
-            self._mitm_instance.shutdown()
 
     def _load_addon(self):
         self._mitm_instance.addons.add(DanmakuWebsocketAddon(MESSAGE_QUEUE))
