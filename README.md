@@ -52,3 +52,31 @@
 ![enter image description here](https://github.com/gll19920817/tiktok_live/blob/main/WX20211129-144919@2x.png?raw=true)
 
 
+### 配置文件说明
+
+- `mitm`：mitmproxy相关配置
+  - `host`：mitmproxy监听地址，_无特殊要求不建议修改_
+  - `port`：mitmproxy监听端口，_无特殊要求不建议修改_
+- `webdriver`：浏览器WebDriver相关配置
+  - `headless`：是否开启无头模式，`True/False`
+  - `use`：使用哪个浏览器，`chrome/edge`
+  - `edge`：Edge浏览器相关配置，用谷歌可以不管这个
+    - `bin`：webdriver可执行文件路径
+  - `chrome`：Chrome浏览器相关配置，用Edge的可以不管这个
+    - `bin`：webdriver可执行文件路径
+    - `no_sandbox`：是否添加`--no-sandbox`启动参数，用于root用户启动浏览器，`True/False`
+- `output`：输出相关配置
+  - `use`：使用的输出模块，为一个数组，`print/xml/debug`
+  - `xml`：XML输出模块相关配置
+    - `save_path`：_预留内容，实际没有作用_
+    - `file_pattern`：xml文件名称格式，现在也只有默认的这个，待后续开发
+  - `debug`：Debug输出模块相关配置
+    - `save_path`：保存路径相关配置
+      - `error`：如果遇见错误，将错误存储在这个路径下
+      - `debug`：如果遇见未处理的消息类型，将该消息存储在这个路径下
+      - `known`：_预留内容，实际没有作用_
+- `live`：直播间相关配置
+  - `rooms`：房间号（链接地址最后一串数字），或者完整链接地址，为一个数组
+  - `users`：用户加密ID（用户首页链接地址最后一串字符串），或者完整链接地址 ，为一个数组
+- `api`：这个现在暂时没啥用了……
+  - `userinfo`：……
