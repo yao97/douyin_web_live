@@ -1,10 +1,10 @@
 import threading
+from typing import TYPE_CHECKING
 from urllib.parse import urlparse
 
-from config.helper import config
-from browser.edge import EdgeDriver
 from browser.chrome import ChromeDriver
-from typing import TYPE_CHECKING
+from browser.edge import EdgeDriver
+from config.helper import config
 
 if TYPE_CHECKING:
     from typing import Type, Optional, List
@@ -27,10 +27,11 @@ class BrowserManager():
         self._tabs: "List[TabInfo]" = []
 
     def init_browser(self):
-        _users = config()['live']['users']
+        _live_config = config().get("live", {})
+        _users = _live_config.get("users", [])
         if type(_users) is not list:
             _users = [_users]
-        _rooms = config()['live']['rooms']
+        _rooms = _live_config.get("rooms", [])
         if type(_rooms) is not list:
             _rooms = [_rooms]
         for _user in _users:

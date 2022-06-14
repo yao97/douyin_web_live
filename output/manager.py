@@ -3,19 +3,19 @@ import threading
 from typing import TYPE_CHECKING
 
 from config.helper import config
-from messages.fansclub import FansclubMessage
-from proxy.queues import MESSAGE_QUEUE
 from messages.chat import ChatMessage
 from messages.control import ControlMessage
+from messages.fansclub import FansclubMessage
 from messages.gift import GiftMessage
 from messages.like import LikeMessage
 from messages.member import MemberMessage
 from messages.roomuserseq import RoomUserSeqMessage
 from messages.social import SocialMessage
+from output.debug import DebugWriter
 from output.print import Print
 from output.xml import XMLWriter
-from output.debug import DebugWriter
 from protobuf import message_pb2, wss_pb2
+from proxy.queues import MESSAGE_QUEUE
 
 if TYPE_CHECKING:
     from typing import Type, Optional, List
@@ -122,7 +122,7 @@ class OutputManager():
             self.decode_payload(message)
 
     def terminate(self):
-        if self._should_exit:
+        if not self._should_exit.is_set():
             self._should_exit.set()
         MESSAGE_QUEUE.put(None)
 

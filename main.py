@@ -23,4 +23,7 @@ if __name__ == '__main__':
     signal.signal(signal.SIGTERM, terminate)
     signal.signal(signal.SIGINT, terminate)
     output_manager.start_loop()
-    proxy_manager.join()
+    try:
+        proxy_manager.join()
+    finally:
+        terminate()
