@@ -1,7 +1,7 @@
 # 抖音web直播间([live.douyin.com](https://live.douyin.com))弹幕抓取
 
 
-> ### 近期工作内容比较繁重，大概率会摸一段时间 (from:q792602257)
+> ### 近期工作内容比较繁重，大概率会摸一段时间 (from:Jerry-Yan-0912)
 > 
 > ### 实现功能： 
 > 1. 使用新版mitmproxy，使mitmproxy进程跑在主进程里，兼容Python3.10
