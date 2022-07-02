@@ -49,8 +49,6 @@
 
 ![enter image description here](https://github.com/FedoraLinux1/douyin_web_live/blob/main/20220519190807.png)
 
-![enter image description here](https://github.com/gll19920817/tiktok_live/blob/main/WX20211129-144919@2x.png?raw=true)
-
 
 ### 配置文件说明
 
