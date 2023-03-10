@@ -1,6 +1,7 @@
 from config.helper import config
 from output.IOutput import IOutput
 from typing import IO
+from datetime import datetime
 import time
 
 
@@ -12,8 +13,8 @@ class XMLWriter(IOutput):
     def __init__(self):
         self._file_mappings: "dict[str, IO[str]]" = {}
         self.time_mappings: "dict[str, float]" = {}
-        self._file_name_pattern: "str" = config()['output']['xml']['file_pattern']
-
+        self._file_name_pattern: "str" = config()['output']['xml']['file_pattern'] 
+ 
     def _get_fd_by_room_id(self, room_id: str) -> IO[str]:
         if room_id in self._file_mappings:
             return self._file_mappings[room_id]
@@ -51,21 +52,12 @@ class XMLWriter(IOutput):
         if fd is None:
             return
         cur_time = time.time()
-        _c = """<d timestamp="{:.0f}" user="{}" user_id="{}" content="{}"></d>\r\n""".format(
-            cur_time,message.user().nickname,message.user().id, message.content
-        )
-        fd.write(_c)
-        fd.flush()
-
-# 礼物模块
-    def gift_output(self, message):
-        fd = self._get_fd_by_room_id(message.room_id)
-        if fd is None:
-            return
-        cur_time = time.time()
-        _c = """<gift ts="{:.2f}" user="{}" user_id="{}" giftname="{}" giftcount="{}"></gift>\r\n""".format(
-            self._get_bias_ts_by_room_id(message.room_id, cur_time),
-            message.user().nickname,message.user().id, message.gift.name, message.instance.repeatCount
+    # Unix转时间
+        _c = """<d timestamp="{}" user="{}" user_id="{}" content="{}"></d>\r\n""".format(
+        datetime.fromtimestamp(cur_time).strftime('%Y-%m-%d %H:%M:%S'),
+        message.user().nickname,
+        message.user().id,
+        message.content
         )
         fd.write(_c)
         fd.flush()
@@ -75,12 +67,27 @@ class XMLWriter(IOutput):
         if fd is None:
             return
         cur_time = time.time()
-        _c = """<m timestamp="{:.0f}" user="{}" user_id="{}"></m>\r\n""".format(
-            cur_time,message.user().nickname,message.user().id
+        # 将当前时间戳转换为datetime对象
+        dt = datetime.fromtimestamp(cur_time)
+        # 将datetime对象转换为指定格式的字符串
+        time_str = dt.strftime("%Y-%m-%d %H:%M:%S")
+        _c = """<into time="{}" user="{}" user_id="{}"></into>\r\n""".format(
+            time_str, message.user().nickname, message.user().id
         )
         fd.write(_c)
         fd.flush()
-
+# 礼物模块
+    # def gift_output(self, message):
+    #     fd = self._get_fd_by_room_id(message.room_id)
+    #     if fd is None:
+    #         return
+    #     cur_time = time.time()
+    #     _c = """<gift ts="{:.2f}" user="{}" user_id="{}" giftname="{}" giftcount="{}"></gift>\r\n""".format(
+    #         self._get_bias_ts_by_room_id(message.room_id, cur_time),
+    #         message.user().nickname,message.user().id, message.gift.name, message.instance.repeatCount
+    #     )
+    #     fd.write(_c)
+    #     fd.flush()
 
 
 
