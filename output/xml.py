@@ -45,30 +45,44 @@ class XMLWriter(IOutput):
         if room_id not in self.time_mappings:
             return 0
         return cur_ts - self.time_mappings[room_id]
-
+# 弹幕模块
     def chat_output(self, message):
         fd = self._get_fd_by_room_id(message.room_id)
         if fd is None:
             return
         cur_time = time.time()
-        _c = """<d p="{:.2f},1,24,{},{:.0f},0,{},0" user="{}">{}</d>\r\n""".format(
-            self._get_bias_ts_by_room_id(message.room_id, cur_time), message.room_id,
-            cur_time * 1000, message.user().id, message.user().nickname, message.content
+        _c = """<d timestamp="{:.0f}" user="{}" user_id="{}" content="{}"></d>\r\n""".format(
+            cur_time,message.user().nickname,message.user().id, message.content
         )
         fd.write(_c)
         fd.flush()
 
+# 礼物模块
     def gift_output(self, message):
         fd = self._get_fd_by_room_id(message.room_id)
         if fd is None:
             return
         cur_time = time.time()
-        _c = """<gift ts="{:.2f}" user="{}" giftname="{}" giftcount="{}"></gift>\r\n""".format(
+        _c = """<gift ts="{:.2f}" user="{}" user_id="{}" giftname="{}" giftcount="{}"></gift>\r\n""".format(
             self._get_bias_ts_by_room_id(message.room_id, cur_time),
-            message.user().nickname, message.gift.name, message.instance.repeatCount
+            message.user().nickname,message.user().id, message.gift.name, message.instance.repeatCount
         )
         fd.write(_c)
         fd.flush()
+# 进入模块
+    def member_output(self, message):
+        fd = self._get_fd_by_room_id(message.room_id)
+        if fd is None:
+            return
+        cur_time = time.time()
+        _c = """<m timestamp="{:.0f}" user="{}" user_id="{}"></m>\r\n""".format(
+            cur_time,message.user().nickname,message.user().id
+        )
+        fd.write(_c)
+        fd.flush()
+
+
+
 
     def terminate(self):
         print("保存所有弹幕文件中...")
